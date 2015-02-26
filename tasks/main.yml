@@ -8,8 +8,10 @@
       failed_when: secure.rc not in (0,1)
 
     - name: get the list of licenses, filter for description
+      run_once: yes
       shell: sudo -u mapr maprcli license list -json | grep 'description":' | grep -v Base
       register: license_descriptions
+      failed_when: license_descriptions.rc not in (0,1)
 
     - name: confirm we are authenticated (if not, maprlogin password -user mapr)
       command: maprlogin authtest
@@ -21,5 +23,5 @@
       notify: 
         - start NFS gateways
         - start standby CLDBs
-      when: "{{license_descriptions.stdout_lines|length}} == 0"
+      when: license_descriptions.rc == 1 # grep returned 1, so no non-Base license found
 
