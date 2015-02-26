@@ -21,5 +21,5 @@
       notify: 
         - start NFS gateways
         - start standby CLDBs
-      when: len(license_descriptions.stdout_lines) > 0
+      when: "{{license_descriptions.stdout_lines|length}} == 0"
 
