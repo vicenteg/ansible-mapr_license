@@ -1,0 +1,25 @@
+---
+# tasks file for mapr_license
+# supply the path to the license file in extra-vars:
+# ansible-playbook -i playbooks/cluster.hosts -e license_file=~/LatestV3DemoLicense.txt playbooks/license.yml
+    - name: register whether this cluster is secure
+      command: grep secure=true /opt/mapr/conf/mapr-clusters.conf
+      register: secure
+      failed_when: secure.rc not in (0,1)
+
+    - name: get the list of licenses, filter for description
+      shell: sudo -u mapr maprcli license list -json | grep 'description":' | grep -v Base
+      register: license_descriptions
+
+    - name: confirm we are authenticated (if not, maprlogin password -user mapr)
+      command: maprlogin authtest
+      when: secure.rc == 0
+
+    - name: install a license key
+      command: maprcli license add -license '{{ lookup('file', license_file) }}'
+      run_once: yes
+      notify: 
+        - start NFS gateways
+        - start standby CLDBs
+      when: len(license_descriptions.stdout_lines) > 0
+

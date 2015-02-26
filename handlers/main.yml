@@ -1,0 +1,8 @@
+---
+# handlers file for mapr_license
+
+    - name: start NFS gateways
+      command: maprcli node services -action start -name nfs -filter csvc==nfs
+
+    - name: start standby CLDBs
+      command: maprcli node services -action start -name cldb -filter csvc==cldb
