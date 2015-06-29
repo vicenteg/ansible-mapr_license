@@ -2,7 +2,11 @@
 # handlers file for mapr_license
 
     - name: start NFS gateways
+      run_once: yes
+      sudo_user: mapr
       command: maprcli node services -action start -name nfs -filter csvc==nfs
 
     - name: start standby CLDBs
+      run_once: yes
+      sudo_user: mapr
       command: maprcli node services -action start -name cldb -filter csvc==cldb
