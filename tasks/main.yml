@@ -4,15 +4,18 @@
 # ansible-playbook -i playbooks/cluster.hosts -e license_file=~/LatestV3DemoLicense.txt playbooks/license.yml
 
     - name: get the list of licenses, filter for description
+      sudo: yes
+      sudo_user: '{{mapr_admin_username}}'
       run_once: yes
-      shell: sudo -u mapr maprcli license list -json | grep 'description":' | grep -v Base
+      shell: maprcli license list -json | grep 'description":' | grep -v Base
       register: license_descriptions
       failed_when: license_descriptions.rc not in (0,1)
       changed_when: false
 
     - name: install a license key
-      command: maprcli license add -license '{{ lookup('file', license_file) }}'
+      sudo: yes
       sudo_user: mapr
+      command: maprcli license add -license '{{ lookup('file', license_file) }}'
       run_once: yes
       notify: 
         - start NFS gateways
