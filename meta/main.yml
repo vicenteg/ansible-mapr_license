@@ -26,5 +26,5 @@ galaxy_info:
   #- system
   #- web
 dependencies: 
-  - { role: mapr_maprlogin, maprlogin_username: mapr, maprlogin_pw_clear: mapr, when: secure_cluster is defined and secure_cluster == "True" }
-  - { role: mapr_authtest, when: secure_cluster is defined and secure_cluster == "True" }
+  - { role: mapr_maprlogin, maprlogin_username: mapr, maprlogin_pw_clear: mapr, when: secure_cluster is defined and secure_cluster == True }
+  - { role: mapr_authtest, when: secure_cluster is defined and secure_cluster == True }
