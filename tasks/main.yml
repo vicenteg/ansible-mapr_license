@@ -1,7 +1,5 @@
 ---
 # tasks file for mapr_license
-# supply the path to the license file in extra-vars:
-# ansible-playbook -i playbooks/cluster.hosts -e license_file=~/LatestV3DemoLicense.txt playbooks/license.yml
 
     - name: get the list of licenses, filter for description
       sudo: yes
@@ -20,5 +18,5 @@
       notify: 
         - start NFS gateways
         - start standby CLDBs
-      when: inventory_hostname == groups["cldb"][0] and license_descriptions.rc == 1 # grep returned 1, so no non-Base license found
+      when: license_file != None and license_file|length > 0  and inventory_hostname == groups["cldb"][0] and license_descriptions.rc == 1 # grep returned 1, so no non-Base license found
 
