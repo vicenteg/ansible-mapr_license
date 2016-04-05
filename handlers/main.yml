@@ -6,6 +6,7 @@
       sudo: yes
       sudo_user: '{{mapr_admin_username}}'
       command: maprcli node services -action start -name nfs -filter csvc==nfs
+      when: nfs_enabled is defined and nfs_enabled == True
 
     - name: start standby CLDBs
       run_once: yes
