@@ -3,13 +3,13 @@
 
     - name: start NFS gateways
       run_once: yes
-      sudo: yes
-      sudo_user: '{{mapr_admin_username}}'
+      become: yes
+      become_user: '{{mapr_admin_username}}'
       command: maprcli node services -action start -name nfs -filter csvc==nfs
       when: nfs_enabled is defined and nfs_enabled == True
 
     - name: start standby CLDBs
       run_once: yes
-      sudo: yes
-      sudo_user: mapr
+      become: yes
+      become_user: mapr
       command: maprcli node services -action start -name cldb -filter csvc==cldb
